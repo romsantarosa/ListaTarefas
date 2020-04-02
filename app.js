@@ -1,6 +1,6 @@
 const express = require('express')
-
 const checkListRouter = require('./src/routes/checklist')
+require('./config/database')
 
 const app = express() //todos os metodos disponiveis no servidor atraves da constante app
 app.use(express.json())
