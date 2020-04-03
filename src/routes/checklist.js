@@ -15,17 +15,32 @@ router.get('/', async (req, res) => {
     res.send()
 })
 
-router.post('/', async (req, res) => {
-    let { name } = req.body
-    console.log(name)
+router.get('/new', async (req, res) => {
+    
     try {
-        let checklist = await checklists.create({ name })
-        res.status(200).json(checklist)
+        let checklist = new Checklist()
+        res.status(200).render('checklists/new', { checklist:checklist })
+        
     } catch (error) {
-        res.status(422).json(error)
+        res.status(500).render('pages/error', {error: 'Erro ao carregar o formulário'})
+      }
+})
+
+router.post('/', async (req, res) => {
+    let { name } = req.body.checklist
+    let checklist = new Checklist({name})
+    
+    try {
+        await Checklist.save()
+        res.redirect('/checklists')
+    } catch (error) {
+        res.status(422).render('checklists/new', {checklists: {...checklist, error} })
       }
         
 })
+
+
+
 
 router.get('/:id', async (req, res) => {
     try {
